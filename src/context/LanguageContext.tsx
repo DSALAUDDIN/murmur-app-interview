@@ -54,7 +54,11 @@ const translations = {
     alreadyRegisteredPrompt: "Already signed up?",
     loginHere: "Login here",
     murmurNotFound: 'Murmur not found.',
-
+    profileLoadError: "Failed to load profile.",
+    profileNotFound: "Profile not found.",
+    deleteButton: "Delete",
+    follow: "Follow",
+    unfollow: "Unfollow",
   },
   ja: {
     timeline: 'タイムライン',
@@ -107,6 +111,11 @@ const translations = {
     alreadyRegisteredPrompt: "すでに登録済みですか？",
     loginHere: "ログインはこちら",
     murmurNotFound: 'つぶやきが見つかりません。',
+    profileLoadError: "プロフィールの読み込みに失敗しました。",
+    profileNotFound: "プロフィールが見つかりません。",
+    deleteButton: "削除",
+    follow: "フォロー",
+    unfollow: "フォロー解除",
 
   }
 };

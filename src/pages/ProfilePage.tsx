@@ -1,10 +1,10 @@
-// /src/pages/ProfilePage.tsx
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import MurmurCard from '../components/MurmurCard';
 import FollowListModal from '../components/FollowListModal';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Murmur {
   id: number;
@@ -27,6 +27,7 @@ interface ProfileData {
 export default function ProfilePage() {
   const { userId: currentUserId } = useAuth();
   const { userId: profileUserId } = useParams<{ userId: string }>();
+  const { t } = useLanguage();
 
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -43,13 +44,14 @@ export default function ProfilePage() {
         const response = await api.get(`/users/${profileUserId}`);
         setProfile(response.data);
       } catch (err) {
-        setError('Failed to load profile.');
+        setError(t.profileLoadError ?? 'Failed to load profile.');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileUserId]);
 
   const handleFollowToggle = async () => {
@@ -98,7 +100,7 @@ export default function ProfilePage() {
   };
 
   const styles = {
-    container: { maxWidth: '700px', margin: '24px auto', padding: '0 16px' },
+    container: { maxWidth: '700px', margin: '24px auto', padding: '0 16px', fontFamily: `'Noto Serif JP', serif` },
     header: { padding: '24px', backgroundColor: 'white', borderRadius: '12px', marginBottom: '24px', boxShadow: '0 2px 6px rgba(0,0,0,0.05)' },
     username: { fontSize: '28px', color: '#4B4E6D', fontWeight: 700 },
     stats: { display: 'flex', gap: '20px', marginTop: '16px' },
@@ -106,11 +108,12 @@ export default function ProfilePage() {
     followButton: { padding: '8px 16px', fontSize: '14px', fontWeight: 600, color: 'white', backgroundColor: '#C73E3A', border: 'none', borderRadius: '8px', cursor: 'pointer' },
     unfollowButton: { padding: '8px 16px', fontSize: '14px', fontWeight: 600, color: '#4B4E6D', backgroundColor: 'white', border: '1px solid #E1DFDA', borderRadius: '8px', cursor: 'pointer' },
     deleteButton: { marginLeft: 'auto', background: 'none', border: '1px solid #E1DFDA', color: '#C73E3A', cursor: 'pointer', borderRadius: '4px', fontSize: '12px' },
-    message: { textAlign: 'center' as 'center', color: '#A8A9AD' }
+    message: { textAlign: 'center' as const, color: '#A8A9AD', fontFamily: `'Noto Serif JP', serif` }
   };
 
-  if (loading) return <p style={styles.message}>Loading profile...</p>;
-  if (error || !profile) return <p style={{ ...styles.message, color: '#C73E3A' }}>{error || 'Profile not found.'}</p>;
+  if (loading) return <p style={styles.message}>{t.loading ?? 'Loading profile...'}</p>;
+  if (!profile) return <p style={{ ...styles.message, color: '#C73E3A' }}>{t.profileNotFound ?? 'Profile not found.'}</p>;
+  if (error) return <p style={{ ...styles.message, color: '#C73E3A' }}>{error}</p>;
 
   return (
     <div style={styles.container}>
@@ -122,16 +125,16 @@ export default function ProfilePage() {
               onClick={handleFollowToggle}
               style={profile.isFollowing ? styles.unfollowButton : styles.followButton}
             >
-              {profile.isFollowing ? 'Unfollow' : 'Follow'}
+              {profile.isFollowing ? (t.unfollow ?? 'Unfollow') : (t.follow ?? 'Follow')}
             </button>
           )}
         </div>
         <div style={styles.stats}>
           <span onClick={() => setModalType('following')} style={styles.statItem}>
-            <b>{profile.followingCount}</b> Following
+            <b>{profile.followingCount}</b> {t.followingTitle ?? 'Following'}
           </span>
           <span onClick={() => setModalType('followers')} style={styles.statItem}>
-            <b>{profile.followerCount}</b> Followers
+            <b>{profile.followerCount}</b> {t.followersTitle ?? 'Followers'}
           </span>
         </div>
       </div>
@@ -142,7 +145,7 @@ export default function ProfilePage() {
             {isOwnProfile && (
               <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-10px', marginBottom: '16px' }}>
                 <button onClick={() => handleDeleteMurmur(murmur.id)} style={styles.deleteButton}>
-                  Delete
+                  {t.deleteButton ?? 'Delete'}
                 </button>
               </div>
             )}
