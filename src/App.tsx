@@ -8,6 +8,7 @@ import SearchPage from './pages/SearchPage';
 import MurmurDetailPage from './pages/MurmurDetailPage';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
+import { LanguageProvider } from './components/LanguageContext';
 
 function App() {
   const styles = {
@@ -18,22 +19,24 @@ function App() {
   };
 
   return (
-    <div style={styles.appContainer}>
-      <BrowserRouter>
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/" element={<ProtectedRoute><TimelinePage /></ProtectedRoute>} />
-            <Route path="/profile/:userId" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-            <Route path="/discover" element={<ProtectedRoute><DiscoverPage /></ProtectedRoute>} />
-            <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
-            <Route path="/murmur/:murmurId" element={<ProtectedRoute><MurmurDetailPage /></ProtectedRoute>} />
-          </Routes>
-        </main>
-      </BrowserRouter>
-    </div>
+    <LanguageProvider>
+      <div style={styles.appContainer}>
+        <BrowserRouter>
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/" element={<ProtectedRoute><TimelinePage /></ProtectedRoute>} />
+              <Route path="/profile/:userId" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/discover" element={<ProtectedRoute><DiscoverPage /></ProtectedRoute>} />
+              <Route path="/search" element={<ProtectedRoute><SearchPage /></ProtectedRoute>} />
+              <Route path="/murmur/:murmurId" element={<ProtectedRoute><MurmurDetailPage /></ProtectedRoute>} />
+            </Routes>
+          </main>
+        </BrowserRouter>
+      </div>
+    </LanguageProvider>
   );
 }
 
