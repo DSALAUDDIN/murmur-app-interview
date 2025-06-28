@@ -1,8 +1,8 @@
-// /src/pages/DiscoverPage.tsx
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import MurmurCard from '../components/MurmurCard';
 import Pagination from '../components/Pagination';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Murmur {
   id: number;
@@ -19,6 +19,7 @@ export default function DiscoverPage() {
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchGlobalFeed = async (page: number) => {
@@ -31,14 +32,14 @@ export default function DiscoverPage() {
         setCurrentPage(response.data.page);
         setLastPage(response.data.last_page);
       } catch (err) {
-        setError('Failed to fetch the global feed. Please try again later.');
+        setError(t.discoverFetchError ?? 'Failed to fetch the global feed. Please try again later.');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
     fetchGlobalFeed(currentPage);
-  }, [currentPage]);
+  }, [currentPage, t.discoverFetchError]);
 
   const handleLikeToggle = async (murmurId: number, newIsLiked: boolean) => {
     setMurmurs(currentMurmurs =>
@@ -60,14 +61,14 @@ export default function DiscoverPage() {
 
   const styles = {
     container: { maxWidth: '600px', margin: '24px auto', padding: '0 16px' },
-    title: { fontSize: '24px', fontWeight: 700, color: '#4B4E6D', marginBottom: '24px' },
-    message: { textAlign: 'center' as 'center', color: '#A8A9AD' }
+    title: { fontSize: '24px', fontWeight: 700, color: '#4B4E6D', marginBottom: '24px', fontFamily: `'Noto Serif JP', serif` },
+    message: { textAlign: 'center' as 'center', color: '#A8A9AD', fontFamily: `'Noto Serif JP', serif` }
   };
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.title}>Discover Murmurs</h1>
-      {loading && <p style={styles.message}>Loading...</p>}
+      <h1 style={styles.title}>{t.discoverPageTitle ?? 'Discover Murmurs'}</h1>
+      {loading && <p style={styles.message}>{t.loading ?? 'Loading...'}</p>}
       {error && <p style={{ ...styles.message, color: '#C73E3A' }}>{error}</p>}
       {!loading && !error && (
         <div>
@@ -76,7 +77,7 @@ export default function DiscoverPage() {
               <MurmurCard key={murmur.id} murmur={murmur} onLikeToggle={handleLikeToggle} />
             ))
           ) : (
-            <p style={styles.message}>No murmurs found.</p>
+            <p style={styles.message}>{t.noMurmursFound ?? 'No murmurs found.'}</p>
           )}
           <Pagination
             currentPage={currentPage}
