@@ -53,6 +53,8 @@ const translations = {
     registerUnexpectedError: "An unexpected error occurred. Please try again.",
     alreadyRegisteredPrompt: "Already signed up?",
     loginHere: "Login here",
+    murmurNotFound: 'Murmur not found.',
+
   },
   ja: {
     timeline: 'タイムライン',
@@ -104,6 +106,8 @@ const translations = {
     registerUnexpectedError: "予期しないエラーが発生しました。もう一度お試しください。",
     alreadyRegisteredPrompt: "すでに登録済みですか？",
     loginHere: "ログインはこちら",
+    murmurNotFound: 'つぶやきが見つかりません。',
+
   }
 };
 
