@@ -1,7 +1,7 @@
-// /src/components/FollowListModal.tsx
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 interface User {
   id: number;
@@ -17,6 +17,7 @@ interface FollowListModalProps {
 export default function FollowListModal({ userId, type, onClose }: FollowListModalProps) {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setLoading(true);
@@ -47,6 +48,7 @@ export default function FollowListModal({ userId, type, onClose }: FollowListMod
       maxHeight: '80vh',
       overflowY: 'auto' as 'auto',
       boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     header: {
       display: 'flex',
@@ -61,6 +63,7 @@ export default function FollowListModal({ userId, type, onClose }: FollowListMod
       color: '#4B4E6D',
       margin: 0,
       fontWeight: 700,
+      fontFamily: `'Noto Serif JP', serif`,
     },
     closeButton: {
       background: 'none',
@@ -74,17 +77,20 @@ export default function FollowListModal({ userId, type, onClose }: FollowListMod
       alignItems: 'center',
       padding: '12px 0',
       borderBottom: '1px solid #E1DFDA',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     usernameLink: {
       textDecoration: 'none',
       color: '#4B4E6D',
       fontWeight: 600,
       fontSize: '16px',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     message: {
       textAlign: 'center' as 'center',
       color: '#A8A9AD',
       padding: '20px 0',
+      fontFamily: `'Noto Serif JP', serif`,
     }
   };
 
@@ -92,11 +98,13 @@ export default function FollowListModal({ userId, type, onClose }: FollowListMod
     <div style={styles.overlay} onClick={onClose}>
       <div style={styles.modal} onClick={e => e.stopPropagation()}>
         <div style={styles.header}>
-          <h2 style={styles.title}>{type.charAt(0).toUpperCase() + type.slice(1)}</h2>
+          <h2 style={styles.title}>
+            {type === 'following' ? (t.followingTitle ?? 'Following') : (t.followersTitle ?? 'Followers')}
+          </h2>
           <button onClick={onClose} style={styles.closeButton}>×</button>
         </div>
         {loading ? (
-          <p style={styles.message}>Loading...</p>
+          <p style={styles.message}>{t.loading ?? 'Loading...'}</p>
         ) : (
           <div>
             {users.length > 0 ? (
@@ -108,7 +116,7 @@ export default function FollowListModal({ userId, type, onClose }: FollowListMod
                 </div>
               ))
             ) : (
-              <p style={styles.message}>No users to display.</p>
+              <p style={styles.message}>{t.noUsersToDisplay ?? 'No users to display.'}</p>
             )}
           </div>
         )}

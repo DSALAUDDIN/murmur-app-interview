@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Notifications from './Notifications';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from '../context/LanguageContext';
 
 // Japanese-inspired color palette & patterns
 const earthBeige = '#F5ECD9';

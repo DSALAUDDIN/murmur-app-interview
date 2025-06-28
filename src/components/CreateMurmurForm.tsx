@@ -1,6 +1,6 @@
-// /src/components/CreateMurmurForm.tsx
 import { useState } from 'react';
 import api from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 
 interface Murmur {
   id: number;
@@ -18,11 +18,12 @@ interface CreateMurmurFormProps {
 export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormProps) {
   const [text, setText] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!text.trim()) {
-      setError('Murmur cannot be empty.');
+      setError(t.murmurEmptyError ?? 'Murmur cannot be empty.');
       return;
     }
     setError(null);
@@ -32,7 +33,7 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
       onMurmurPosted(response.data);
       setText('');
     } catch (err) {
-      setError('Failed to post murmur. Please try again.');
+      setError(t.murmurPostError ?? 'Failed to post murmur. Please try again.');
       console.error(err);
     }
   };
@@ -45,6 +46,7 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
       marginBottom: '24px',
       boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
       border: '1px solid #E1DFDA',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     textarea: {
       width: '100%',
@@ -56,17 +58,21 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
       color: '#4B4E6D',
       resize: 'vertical' as 'vertical',
       boxSizing: 'border-box' as 'border-box',
+      fontFamily: `'Noto Serif JP', serif`,
+      background: '#F5ECD9',
     },
     footer: {
       display: 'flex',
       justifyContent: 'flex-end',
       alignItems: 'center',
       marginTop: '12px',
+      gap: '10px',
     },
     charCount: {
       marginRight: '16px',
       color: text.length > 280 ? '#C73E3A' : '#A8A9AD',
       fontSize: '14px',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     button: {
       padding: '8px 24px',
@@ -77,6 +83,9 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
       border: 'none',
       borderRadius: '8px',
       cursor: 'pointer',
+      fontFamily: `'Noto Serif JP', serif`,
+      boxShadow: '0 2px 0 0 #e3b3b7',
+      transition: 'background 0.18s',
     },
     disabledButton: {
       backgroundColor: '#A8A9AD',
@@ -86,6 +95,7 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
       color: '#C73E3A',
       fontSize: '14px',
       marginTop: '8px',
+      fontFamily: `'Noto Serif JP', serif`,
     },
   };
 
@@ -95,7 +105,7 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
     <form style={styles.form} onSubmit={handleSubmit}>
       <textarea
         style={styles.textarea}
-        placeholder="What's happening?"
+        placeholder={t.murmurPlaceholder ?? "What's happening?"}
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
@@ -107,7 +117,7 @@ export default function CreateMurmurForm({ onMurmurPosted }: CreateMurmurFormPro
           disabled={isButtonDisabled}
           style={{ ...styles.button, ...(isButtonDisabled ? styles.disabledButton : {}) }}
         >
-          Murmur
+          {t.murmurButton ?? 'Murmur'}
         </button>
       </div>
     </form>

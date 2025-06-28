@@ -8,7 +8,7 @@ import SearchPage from './pages/SearchPage';
 import MurmurDetailPage from './pages/MurmurDetailPage';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
-import { LanguageProvider } from './components/LanguageContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 function App() {
   const styles = {

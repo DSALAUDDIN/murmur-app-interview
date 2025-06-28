@@ -1,4 +1,5 @@
-// /src/components/Pagination.tsx
+import { useLanguage } from '../context/LanguageContext';
+
 interface PaginationProps {
   currentPage: number;
   lastPage: number;
@@ -6,12 +7,15 @@ interface PaginationProps {
 }
 
 export default function Pagination({ currentPage, lastPage, onPageChange }: PaginationProps) {
+  const { t } = useLanguage();
+
   const styles = {
     container: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       marginTop: '24px',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     button: {
       padding: '8px 16px',
@@ -23,6 +27,7 @@ export default function Pagination({ currentPage, lastPage, onPageChange }: Pagi
       border: 'none',
       borderRadius: '8px',
       cursor: 'pointer',
+      fontFamily: `'Noto Serif JP', serif`,
     },
     disabledButton: {
       backgroundColor: '#A8A9AD',
@@ -31,6 +36,7 @@ export default function Pagination({ currentPage, lastPage, onPageChange }: Pagi
     pageInfo: {
       color: '#4B4E6D',
       fontWeight: 600,
+      fontFamily: `'Noto Serif JP', serif`,
     },
   };
 
@@ -60,10 +66,12 @@ export default function Pagination({ currentPage, lastPage, onPageChange }: Pagi
           ...(currentPage === 1 ? styles.disabledButton : {}),
         }}
       >
-        Previous
+        {t.previous ?? 'Previous'}
       </button>
       <span style={styles.pageInfo}>
-        Page {currentPage} of {lastPage}
+        {t.pageInfo
+          ? t.pageInfo.replace('{current}', String(currentPage)).replace('{last}', String(lastPage))
+          : `Page ${currentPage} of ${lastPage}`}
       </span>
       <button
         onClick={handleNext}
@@ -73,7 +81,7 @@ export default function Pagination({ currentPage, lastPage, onPageChange }: Pagi
           ...(currentPage === lastPage ? styles.disabledButton : {}),
         }}
       >
-        Next
+        {t.next ?? 'Next'}
       </button>
     </div>
   );
